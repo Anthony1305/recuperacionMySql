@@ -1,0 +1,7 @@
+CREATE TRIGGER negacion before INSERT ON alquiler FOR EACH ROW 
+BEGIN
+	set @cantidad = (select count(alquiler.IDALQUILER) from alquiler where alquiler.FECHAENTREGA is null  and alquiler.IDCLIENTE = new.IDCLIENTE);
+	if( @cantidad >= 2) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CLiente con 2 alquileres pendientes de entrega';
+	end if;
+END
